@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LinearNetwork"
         mc:Ignorable="d"
-        Title="MainWindow" Width="1000" Height="600" x:Name="Window">
+        Title="MainWindow" Width="1000" Height="600" x:Name="Window" IsEnabled="{Binding IsLearning, Converter={local:InvertedBoolToVisibilityConverter}}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200" />
@@ -18,9 +18,11 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <TextBlock Text="Данные для обучения" Margin="5" FontSize="15" />
-            <ItemsControl Grid.Row="1" ItemsSource="{Binding Points}">
+            <ItemsControl Grid.Row="1" ItemsSource="{Binding GraphModel.Points}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Grid HorizontalAlignment="Stretch" Height="25">
@@ -30,16 +32,24 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock VerticalAlignment="Center" Margin="2">
                                 <Run Text="Точка" />
-                                <Run Text="(" /><Run Text="{Binding Path=X}" /><Run Text=", " /><Run Text="{Binding Path=Y}" /><Run Text=")" />
+                                <Run Text="(" /><Run Text="{Binding Path=X, StringFormat=F1}" /><Run Text=", " /><Run Text="{Binding Path=Y, StringFormat=F1}" /><Run Text=")" />
                             </TextBlock>
                             <Button Grid.Column="1" Content="Удалить" Margin="2" Padding="5 0" Command="{Binding Path=DataContext.DeletePointCommand, ElementName=Window}" CommandParameter="{Binding}" />
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
+            <StackPanel Grid.Row="2" Orientation="Horizontal">
+                <TextBlock Margin="5" Text="X:" />
+                <TextBox Margin="3" Width="30" Text="{Binding NewPointX}" />
+                <TextBlock Margin="5" Text="Y:" />
+                <TextBox Margin="3" Width="30" Text="{Binding NewPointY}" />
+            </StackPanel>
+            <Button Grid.Row="2" Content="Добавить" HorizontalAlignment="Right" Margin="5 0" Padding="5 0" Command="{Binding AddCommand}" />
+            <Button Grid.Row="3" Grid.Column="0" Content="Очистить" Padding="10 10" Margin="5" Command="{Binding ClearPointsCommand}" />
         </Grid>
         <GridSplitter Grid.Column="1" Background="#E1E1E1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
-        <local:Graph Points="{Binding Points, Mode=TwoWay}" Grid.Column="2" />
+        <local:Graph Model="{Binding GraphModel}" Grid.Column="2" />
         <GridSplitter Grid.Column="3" Background="#E1E1E1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
         <Grid Grid.Column="4">
             <Grid.RowDefinitions>
@@ -75,9 +85,9 @@
             <TextBlock Grid.Row="6" Grid.Column="0" Text="Макс. итераций" Margin="5" />
             <TextBox Grid.Row="6" Grid.Column="1" Margin="5" Text="{Binding InitialParams.MaxIterations}" />
 
-            <TextBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" MaxLines="99999" VerticalScrollBarVisibility="Visible" IsReadOnly="True" Margin="5" />
+            <local:ScrollingTextBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" MaxLines="99999" VerticalScrollBarVisibility="Visible" IsReadOnly="True" Margin="5" Text="{Binding Messages}" />
 
-            <Button Grid.Row="8" Grid.ColumnSpan="2" Grid.Column="0" Content="Начать обучение" Padding="10 10" Margin="5" />
+            <Button Grid.Row="8" Grid.ColumnSpan="2" Grid.Column="0" Content="Начать обучение" Padding="10 10" Margin="5" Command="{Binding StartCommand}" />
         </Grid>
     </Grid>
 </Window>

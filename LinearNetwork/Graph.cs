@@ -6,33 +6,50 @@ using System.Windows.Media;
 
 namespace LinearNetwork
 {
-    class Graph : FrameworkElement
+    class GraphModel
     {
-        public static readonly DependencyProperty PointsProperty 
-            = DependencyProperty.Register("Points", typeof(ObservableCollection<Point>), typeof(Graph), 
-                new FrameworkPropertyMetadata(default(ObservableCollection<Point>), FrameworkPropertyMetadataOptions.AffectsRender, PropertyChangedCallback));
-
-        private static void PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        public GraphModel()
         {
-            if (d is Graph graph)
+            Function = new LinearFunction();
+            Points = new ObservableCollection<Point>();
+            Points.CollectionChanged += (sender, args) => RequestInvalidate?.Invoke();
+        }
+
+        public ObservableCollection<Point> Points { get; set; }
+
+        public LinearFunction Function
+        {
+            get => _function;
+            set
             {
-                ((ObservableCollection<Point>) e.NewValue).CollectionChanged += (sender, args) => graph.InvalidateVisual();
+                _function = value;
+                RequestInvalidate?.Invoke();
             }
         }
 
-        public ObservableCollection<Point> Points
+        public event Action RequestInvalidate;
+
+        private LinearFunction _function;
+    }
+
+    class Graph : FrameworkElement
+    {
+        public static readonly DependencyProperty ModelProperty 
+            = DependencyProperty.Register("Model", typeof(GraphModel), typeof(Graph), 
+                new PropertyMetadata(default(GraphModel), ModelChangedCallback));
+
+        private static void ModelChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            get => (ObservableCollection<Point>) GetValue(PointsProperty);
-            set => SetValue(PointsProperty, value);
+            if (d is Graph view)
+            {
+                ((GraphModel) e.NewValue).RequestInvalidate += () => view.InvalidateVisual();
+            }
         }
 
-        public static readonly DependencyProperty LineProperty 
-            = DependencyProperty.Register("Line", typeof(InitialParams), typeof(Graph), 
-                new FrameworkPropertyMetadata(default(InitialParams), FrameworkPropertyMetadataOptions.AffectsRender));
-        public InitialParams Line
+        public GraphModel Model
         {
-            get => (InitialParams) GetValue(LineProperty);
-            set => SetValue(LineProperty, value);
+            get => (GraphModel) GetValue(ModelProperty);
+            set => SetValue(ModelProperty, value);
         }
 
         public Graph()
@@ -67,9 +84,9 @@ namespace LinearNetwork
             dc.DrawLine(_axisPen, new Point(GraphToScreen(0, _x), 0), new Point(GraphToScreen(0, _x), ActualHeight));
             dc.DrawLine(_axisPen, new Point(0, GraphToScreen(0, _y)), new Point(ActualWidth, GraphToScreen(0, _y)));
 
-            if (Points != null)
+            if (Model?.Points != null)
             {
-                foreach (var point in Points)
+                foreach (var point in Model.Points)
                 {
                     var x = Math.Round(GraphToScreen(point.X, _x), 1);
                     var y = Math.Round(GraphToScreen(point.Y, _y), 1);
@@ -77,16 +94,28 @@ namespace LinearNetwork
                 }
             }
 
+            if (Model?.Function != null)
+            {
+                var x1 = ScreenToGraph(0, _x);
+                var x2 = ScreenToGraph(ActualWidth, _x);
+
+                var y1 = Model.Function.Calc(x1);
+                var y2 = Model.Function.Calc(x2);
+
+                dc.DrawLine(_funcPen, new Point(0, GraphToScreen(y1, _y)), new Point(ActualWidth, GraphToScreen(y2, _y)));
+            }
+
             dc.Pop();
         }
 
         protected override void OnPreviewMouseDown(MouseButtonEventArgs e)
         {
-            if (Points == null) return;
+            if (Model?.Points == null) return;
+            if (IsEnabled == false) return;
 
             var position = e.GetPosition(this);
 
-            Points.Add(new Point(ScreenToGraph(position.X, _x), ScreenToGraph(position.Y, _y)));
+            Model.Points.Add(new Point(ScreenToGraph(position.X, _x), ScreenToGraph(position.Y, _y)));
 
             InvalidateVisual();
         }
@@ -104,10 +133,11 @@ namespace LinearNetwork
             return (value - offset) * _zoom;
         }
 
-        private double _zoom = 10;
+        private double _zoom = 20;
         private double _x = 0;
         private double _y = 0;
 
+        private readonly Pen _funcPen = new Pen(new SolidColorBrush(Color.FromRgb(95, 232, 86)).ToFrozen(), 1.5).ToFrozen();
         private readonly Pen _axisPen = new Pen(new SolidColorBrush(Color.FromRgb(123, 123, 123)).ToFrozen(), 1.5).ToFrozen();
         private readonly Pen _coordPen = new Pen(new SolidColorBrush(Color.FromRgb(234, 234, 234)).ToFrozen(), 1).ToFrozen();
     }
