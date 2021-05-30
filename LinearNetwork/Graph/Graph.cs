@@ -1,37 +1,11 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using LinearNetwork.Util;
 
-namespace LinearNetwork
+namespace LinearNetwork.Graph
 {
-    class GraphModel
-    {
-        public GraphModel()
-        {
-            Function = new LinearFunction();
-            Points = new ObservableCollection<Point>();
-            Points.CollectionChanged += (sender, args) => RequestInvalidate?.Invoke();
-        }
-
-        public ObservableCollection<Point> Points { get; set; }
-
-        public LinearFunction Function
-        {
-            get => _function;
-            set
-            {
-                _function = value;
-                RequestInvalidate?.Invoke();
-            }
-        }
-
-        public event Action RequestInvalidate;
-
-        private LinearFunction _function;
-    }
-
     class Graph : FrameworkElement
     {
         public static readonly DependencyProperty ModelProperty 
@@ -178,15 +152,5 @@ namespace LinearNetwork
         private readonly Pen _funcPen = new Pen(new SolidColorBrush(Color.FromRgb(95, 232, 86)).ToFrozen(), 1.5).ToFrozen();
         private readonly Pen _axisPen = new Pen(new SolidColorBrush(Color.FromRgb(123, 123, 123)).ToFrozen(), 1.5).ToFrozen();
         private readonly Pen _coordPen = new Pen(new SolidColorBrush(Color.FromRgb(234, 234, 234)).ToFrozen(), 1).ToFrozen();
-    }
-
-    public static class Extensions
-    {
-        public static T ToFrozen<T>(this T freezable) where T : Freezable
-        {
-            freezable.Freeze();
-            return freezable;
-        }
-
     }
 }

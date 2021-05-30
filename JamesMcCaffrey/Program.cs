@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace JamesMcCaffrey
+namespace Reference
 {
     internal class Program
     {

@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{80446C4A-8059-4AE9-BD52-B3A838522DD0}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>JamesMcCaffrey</RootNamespace>
+    <RootNamespace>Reference</RootNamespace>
     <AssemblyName>JamesMcCaffrey</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

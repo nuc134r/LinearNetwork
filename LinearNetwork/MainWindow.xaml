@@ -4,8 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LinearNetwork"
+        xmlns:graph="clr-namespace:LinearNetwork.Graph"
+        xmlns:util="clr-namespace:LinearNetwork.Util"
         mc:Ignorable="d"
-        Title="MainWindow" Width="1300" Height="600" x:Name="Window" IsEnabled="{Binding IsLearning, Converter={local:InvertedBoolConverter}}">
+        Title="MainWindow" Width="1300" Height="600" x:Name="Window" IsEnabled="{Binding IsLearning, Converter={util:InvertedBoolConverter}}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200" />
@@ -49,7 +51,7 @@
             <Button Grid.Row="3" Grid.Column="0" Content="Очистить" Padding="10 10" Margin="5" Command="{Binding ClearPointsCommand}" />
         </Grid>
         <GridSplitter Grid.Column="1" Background="#E1E1E1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
-        <local:Graph Model="{Binding GraphModel}" Grid.Column="2" IsEnabled="True" />
+        <graph:Graph Model="{Binding GraphModel}" Grid.Column="2" IsEnabled="True" />
         <GridSplitter Grid.Column="3" Background="#E1E1E1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
         <Grid Grid.Column="4">
             <Grid.RowDefinitions>
@@ -85,7 +87,7 @@
             <TextBlock Grid.Row="6" Grid.Column="0" Text="Макс. итераций" Margin="5" />
             <TextBox Grid.Row="6" Grid.Column="1" Margin="5" Text="{Binding InitialParams.MaxIterations}" />
 
-            <local:ScrollingTextBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" MaxLines="9999999" VerticalScrollBarVisibility="Visible" IsReadOnly="True" Margin="5" Text="{Binding Messages}" />
+            <util:ScrollingTextBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" MaxLines="9999999" VerticalScrollBarVisibility="Visible" IsReadOnly="True" Margin="5" Text="{Binding Messages}" />
 
             <Button Grid.Row="8" Grid.ColumnSpan="2" Grid.Column="0" Content="Начать обучение" Padding="10 10" Margin="5" Command="{Binding StartCommand}" />
         </Grid>

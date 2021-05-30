@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using LinearNetwork.Annotations;
 
-namespace LinearNetwork
+namespace LinearNetwork.Util
 {
     class ViewModelBase : INotifyPropertyChanged
     {

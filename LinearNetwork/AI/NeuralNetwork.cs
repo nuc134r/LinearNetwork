@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
 using System.Windows;
 
-namespace LinearNetwork
+namespace LinearNetwork.AI
 {
     class NeuralNetwork
     {

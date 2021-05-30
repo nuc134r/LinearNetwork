@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Controls;
 
-namespace LinearNetwork
+namespace LinearNetwork.Util
 {
     public class ScrollingTextBox : TextBox
     {
