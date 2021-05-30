@@ -48,4 +48,9 @@ namespace LinearNetwork
         public InvertedBoolToVisibilityConverter() :
             base(Visibility.Collapsed, Visibility.Visible) { }
     }
+
+    public sealed class InvertedBoolConverter : BooleanConverter<bool>
+    {
+        public InvertedBoolConverter() : base(false, true) { }
+    }
 }

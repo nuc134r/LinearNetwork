@@ -108,20 +108,54 @@ namespace LinearNetwork
             dc.Pop();
         }
 
-        protected override void OnPreviewMouseDown(MouseButtonEventArgs e)
+        protected override void OnMouseDown(MouseButtonEventArgs e)
         {
-            if (Model?.Points == null) return;
-            if (IsEnabled == false) return;
-
             var position = e.GetPosition(this);
 
-            Model.Points.Add(new Point(ScreenToGraph(position.X, _x), ScreenToGraph(position.Y, _y)));
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                if (Model?.Points == null) return;
+                if (IsEnabled == false) return;
 
-            InvalidateVisual();
+                Model.Points.Add(new Point(ScreenToGraph(position.X, _x), ScreenToGraph(position.Y, _y)));
+
+                InvalidateVisual();
+            }
+
+            if (e.ChangedButton == MouseButton.Right)
+            {
+                Mouse.Capture(this);
+
+                _dragStartLocation = position;
+                _dragStartPosition = new Point(_x, _y);
+                _isDragging = true;
+
+                Cursor = Cursors.Hand;
+            }
         }
 
-        private double GraphWidth => ActualWidth / _zoom;
-        private double GraphHeight => ActualHeight / _zoom;
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            var position = e.GetPosition(this);
+
+            if (_isDragging)
+            {
+                _x = _dragStartPosition.X + ScreenToGraph(_dragStartLocation.X, 0) - ScreenToGraph(position.X, 0);
+                _y = _dragStartPosition.Y + ScreenToGraph(_dragStartLocation.Y, 0) - ScreenToGraph(position.Y, 0);
+
+                InvalidateVisual();
+            }
+        }
+
+        protected override void OnMouseUp(MouseButtonEventArgs e)
+        {
+            if (_isDragging && e.ChangedButton == MouseButton.Right)
+            {
+                _isDragging = false;
+                Cursor = Cursors.Arrow;
+                Mouse.Capture(null);
+            }
+        }
 
         private double ScreenToGraph(double value, double offset)
         {
@@ -136,6 +170,10 @@ namespace LinearNetwork
         private double _zoom = 20;
         private double _x = 0;
         private double _y = 0;
+
+        private Point _dragStartLocation;
+        private Point _dragStartPosition;
+        private bool _isDragging;
 
         private readonly Pen _funcPen = new Pen(new SolidColorBrush(Color.FromRgb(95, 232, 86)).ToFrozen(), 1.5).ToFrozen();
         private readonly Pen _axisPen = new Pen(new SolidColorBrush(Color.FromRgb(123, 123, 123)).ToFrozen(), 1.5).ToFrozen();

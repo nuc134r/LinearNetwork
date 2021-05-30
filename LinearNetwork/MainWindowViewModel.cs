@@ -40,7 +40,8 @@ namespace LinearNetwork
             IsLearning = true;
             OnPropertyChanged(nameof(IsLearning));
 
-            var net = new NeuralNetwork(InitialParams, s =>
+            var net = new NeuralNetwork(InitialParams.Clone(), 
+            s =>
             {
                 Messages += s + Environment.NewLine;
                 OnPropertyChanged(nameof(Messages));
@@ -103,9 +104,9 @@ namespace LinearNetwork
             return (-Bias - Weight1 * x) / Weight2;
         }
 
-        private double _weight1;
-        private double _weight2;
-        private double _bias;
+        private double _weight1 = 3;
+        private double _weight2 = 3;
+        private double _bias = 1;
     }
 
     class InitialParams : LinearFunction
