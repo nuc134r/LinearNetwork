@@ -4,9 +4,9 @@ using System.Windows;
 
 namespace LinearNetwork.Graph
 {
-    class GraphModel
+    class LinearFunctionGraphModel
     {
-        public GraphModel()
+        public LinearFunctionGraphModel()
         {
             Function = new LinearFunction();
             Points = new ObservableCollection<Point>();

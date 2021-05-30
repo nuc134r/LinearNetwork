@@ -1,25 +1,24 @@
-﻿using System;
+﻿using LinearNetwork.Util;
+using System;
 using System.Globalization;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using LinearNetwork.Util;
 
 namespace LinearNetwork.Graph
 {
-    class Graph : FrameworkElement
+    class LinearFunctionGraph : FrameworkElement
     {
         public static readonly DependencyProperty ModelProperty 
-            = DependencyProperty.Register("Model", typeof(GraphModel), typeof(Graph), 
-                new PropertyMetadata(default(GraphModel), ModelChangedCallback));
-        public GraphModel Model
+            = DependencyProperty.Register("Model", typeof(LinearFunctionGraphModel), typeof(LinearFunctionGraph), 
+                new PropertyMetadata(default(LinearFunctionGraphModel), ModelChangedCallback));
+        public LinearFunctionGraphModel Model
         {
-            get => (GraphModel) GetValue(ModelProperty);
+            get => (LinearFunctionGraphModel) GetValue(ModelProperty);
             set => SetValue(ModelProperty, value);
         }
 
-        public Graph()
+        public LinearFunctionGraph()
         {
             Loaded += (sender, args) => { ResetTransform(); };
         }
@@ -125,9 +124,9 @@ namespace LinearNetwork.Graph
 
         private static void ModelChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is Graph view)
+            if (d is LinearFunctionGraph view)
             {
-                ((GraphModel) e.NewValue).RequestInvalidate += () => view.InvalidateVisual();
+                ((LinearFunctionGraphModel) e.NewValue).RequestInvalidate += () => view.InvalidateVisual();
             }
         }
         

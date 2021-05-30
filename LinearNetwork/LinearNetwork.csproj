@@ -55,10 +55,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AI\Consts.cs" />
+    <Compile Include="Graph\RatioGraph.cs" />
     <Compile Include="Util\Converters.cs" />
     <Compile Include="Util\Extensions.cs" />
-    <Compile Include="Graph\Graph.cs" />
-    <Compile Include="Graph\GraphModel.cs" />
+    <Compile Include="Graph\LinearFunctionGraph.cs" />
+    <Compile Include="Graph\LinearFunctionGraphModel.cs" />
     <Compile Include="AI\NeuralNetwork.cs" />
     <Compile Include="Util\RelayCommand.cs" />
     <Compile Include="Util\ScrollingTextBox.cs" />

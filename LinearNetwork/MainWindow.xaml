@@ -43,15 +43,55 @@
             </ItemsControl>
             <StackPanel Grid.Row="2" Orientation="Horizontal">
                 <TextBlock Margin="5" Text="X:" />
-                <TextBox Margin="3" Width="30" Text="{Binding NewPointX}" />
+                <TextBox Margin="3" Width="30" Text="{Binding NewPointX, UpdateSourceTrigger=PropertyChanged}" />
                 <TextBlock Margin="5" Text="Y:" />
-                <TextBox Margin="3" Width="30" Text="{Binding NewPointY}" />
+                <TextBox Margin="3" Width="30" Text="{Binding NewPointY, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
             <Button Grid.Row="2" Content="Добавить" HorizontalAlignment="Right" Margin="5 0" Padding="5 0" Command="{Binding AddCommand}" />
             <Button Grid.Row="3" Grid.Column="0" Content="Очистить" Padding="10 10" Margin="5" Command="{Binding ClearPointsCommand}" />
         </Grid>
         <GridSplitter Grid.Column="1" Background="#E1E1E1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
-        <graph:Graph Model="{Binding GraphModel}" Grid.Column="2" IsEnabled="True" />
+        <TabControl Grid.Column="2" SelectedIndex="{Binding CurrentTabIndex}">
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Margin="3">График функции</TextBlock>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <graph:LinearFunctionGraph Model="{Binding GraphModel}" IsEnabled="True" />
+                </TabItem.Content>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Margin="3">Подбор скорости обучения</TextBlock>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid>
+                            <graph:RatioGraph Model="{Binding EpochRatioGraphModel}" />
+                            <TextBlock Text="Скорость обучения" FontSize="14" FontWeight="DemiBold" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="8" />
+                            <TextBlock Text="Количество эпох" FontSize="14" FontWeight="DemiBold" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="-40" RenderTransformOrigin="0.5,0.5" >
+                                <TextBlock.RenderTransform>
+                                    <RotateTransform Angle="-90"/>
+                                </TextBlock.RenderTransform>
+                            </TextBlock>
+                        </Grid>
+                        <Grid Grid.Row="1">
+                            <graph:RatioGraph Model="{Binding AccuracyRatioGraphModel}" />
+                            <TextBlock Text="Скорость обучения" FontSize="14" FontWeight="DemiBold" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="8" />
+                            <TextBlock Text="Точность" FontSize="14" FontWeight="DemiBold" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="-15" RenderTransformOrigin="0.5,0.5" >
+                                <TextBlock.RenderTransform>
+                                    <RotateTransform Angle="-90"/>
+                                </TextBlock.RenderTransform>
+                            </TextBlock>
+                        </Grid>
+                    </Grid>
+                </TabItem.Content>
+            </TabItem>
+        </TabControl>
         <GridSplitter Grid.Column="3" Background="#E1E1E1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
         <Grid Grid.Column="4">
             <Grid.RowDefinitions>
@@ -71,21 +111,21 @@
                 <ColumnDefinition Width="100" />
             </Grid.ColumnDefinitions>
             <TextBlock Text="Параметры обучения" Margin="5" FontSize="15" />
-            
+
             <TextBlock Grid.Row="1" Grid.Column="0" Text="Начальный вес 1" Margin="5" />
             <TextBox Grid.Row="1" Grid.Column="1" Margin="5" Text="{Binding InitialParams.Weight1}" />
-            
+
             <TextBlock Grid.Row="2" Grid.Column="0" Text="Начальный вес 2" Margin="5" />
             <TextBox Grid.Row="2" Grid.Column="1" Margin="5" Text="{Binding InitialParams.Weight2}" />
-            
+
             <TextBlock Grid.Row="3" Grid.Column="0" Text="Начальное смещение" Margin="5" />
             <TextBox Grid.Row="3" Grid.Column="1" Margin="5" Text="{Binding InitialParams.Bias}" />
-            
-            <TextBlock Grid.Row="4" Grid.Column="0" Text="Скорость обучения" Margin="5" />
-            <TextBox Grid.Row="4" Grid.Column="1" Margin="5" Text="{Binding InitialParams.LearningRate}" />
-            <Slider Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Minimum="0.00001" Maximum="0.5" Margin="5" Value="{Binding InitialParams.LearningRate}" />
 
-            <TextBlock Grid.Row="6" Grid.Column="0" Text="Макс. итераций" Margin="5" />
+            <TextBlock Grid.Row="4" Grid.Column="0" Text="Скорость обучения" Margin="5" />
+            <TextBox Grid.Row="4" Grid.Column="1" Margin="5" Text="{Binding InitialParams.LearningRate}" IsEnabled="{Binding IsLearningRateConfigurable}" />
+            <Slider Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Minimum="0.00001" Maximum="0.4" Margin="5" Value="{Binding InitialParams.LearningRate}" IsEnabled="{Binding IsLearningRateConfigurable}" />
+
+            <TextBlock Grid.Row="6" Grid.Column="0" Text="Макс. эпох" Margin="5" />
             <TextBox Grid.Row="6" Grid.Column="1" Margin="5" Text="{Binding InitialParams.MaxIterations}" />
 
             <TextBlock Grid.Row="7" Grid.Column="0" Text="Целевая ошибка" Margin="5" />
