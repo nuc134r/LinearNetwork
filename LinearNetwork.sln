@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinearNetwork", "LinearNetwork\LinearNetwork.csproj", "{E91392BC-81CA-4403-BF71-6FAD053D5938}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reference", "JamesMcCaffrey\Reference.csproj", "{80446C4A-8059-4AE9-BD52-B3A838522DD0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reference", "Reference\Reference.csproj", "{80446C4A-8059-4AE9-BD52-B3A838522DD0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
