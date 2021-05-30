@@ -62,6 +62,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
@@ -69,7 +70,7 @@
                 <ColumnDefinition />
                 <ColumnDefinition Width="100" />
             </Grid.ColumnDefinitions>
-            <TextBlock Text="Обучение" Margin="5" FontSize="15" />
+            <TextBlock Text="Параметры обучения" Margin="5" FontSize="15" />
             
             <TextBlock Grid.Row="1" Grid.Column="0" Text="Начальный вес 1" Margin="5" />
             <TextBox Grid.Row="1" Grid.Column="1" Margin="5" Text="{Binding InitialParams.Weight1}" />
@@ -87,9 +88,12 @@
             <TextBlock Grid.Row="6" Grid.Column="0" Text="Макс. итераций" Margin="5" />
             <TextBox Grid.Row="6" Grid.Column="1" Margin="5" Text="{Binding InitialParams.MaxIterations}" />
 
-            <util:ScrollingTextBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" MaxLines="9999999" VerticalScrollBarVisibility="Visible" IsReadOnly="True" Margin="5" Text="{Binding Messages}" />
+            <TextBlock Grid.Row="7" Grid.Column="0" Text="Целевая ошибка" Margin="5" />
+            <TextBox Grid.Row="7" Grid.Column="1" Margin="5" Text="{Binding InitialParams.TargetError}" />
 
-            <Button Grid.Row="8" Grid.ColumnSpan="2" Grid.Column="0" Content="Начать обучение" Padding="10 10" Margin="5" Command="{Binding StartCommand}" />
+            <util:ScrollingTextBox Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" MaxLines="9999999" VerticalScrollBarVisibility="Visible" IsReadOnly="True" Margin="5" Text="{Binding Messages}" />
+
+            <Button Grid.Row="9" Grid.ColumnSpan="2" Grid.Column="0" Content="Начать обучение" Padding="10 10" Margin="5" Command="{Binding StartCommand}" />
         </Grid>
     </Grid>
 </Window>

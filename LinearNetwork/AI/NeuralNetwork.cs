@@ -20,13 +20,13 @@ namespace LinearNetwork.AI
         public (int iterations, double totalError, double w1, double w2, double b) Train(Point[] trainingData)
         {
             var i = 0;
-            var targetError = 0.0;
             var rate = _params.LearningRate;
+            var targetError = _params.TargetError;
             var maxIterations = _params.MaxIterations;
 
-            var totalError = -1.0;
+            var totalError = double.MaxValue;
 
-            while (i < maxIterations && totalError != targetError)
+            while (i < maxIterations && totalError > targetError)
             {
                 foreach (var point in trainingData)
                 {
@@ -41,6 +41,12 @@ namespace LinearNetwork.AI
                 }
 
                 totalError = TotalError(trainingData, _w1, _w2, _b);
+
+                if (double.IsNaN(_w1) || double.IsNaN(_w2) || double.IsNaN(_b))
+                {
+                    _logger($"Обнаружено переполнение");
+                    break;
+                }
 
                 if (maxIterations < 3_000 || i % 100 == 0)
                 {

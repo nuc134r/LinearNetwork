@@ -43,7 +43,8 @@ namespace LinearNetwork
             IsLearning = true;
             OnPropertyChanged(nameof(IsLearning));
 
-            var net = new NeuralNetwork(InitialParams.Clone(), 
+            var initialParams = InitialParams.Clone();
+            var net = new NeuralNetwork(initialParams, 
             s =>
             {
                 Messages += s + Environment.NewLine;
@@ -57,13 +58,24 @@ namespace LinearNetwork
             Messages = string.Empty;
             OnPropertyChanged(nameof(Messages));
 
-            int iterations;
-            double totalError;
-            double w1;
-            double w2;
-            double b;
+            var iterations = 0;
+            double totalError = -1;
+            double w1 = 0;
+            double w2 = 0;
+            double b = 0;
             
             await Task.Run(() => { (iterations, totalError, w1, w2, b) = net.Train(GraphModel.Points.ToArray()); });
+
+            Messages += "Обучение окончено!" + Environment.NewLine + Environment.NewLine;
+            Messages += $"Итераций: {iterations}/{initialParams.MaxIterations} {Environment.NewLine}{Environment.NewLine}";
+            Messages += $"w₁: {w1} {Environment.NewLine}";
+            Messages += $"w₂: {w2} {Environment.NewLine}";
+            Messages += $"bₖ: {b} {Environment.NewLine}{Environment.NewLine}";
+            Messages += $"Ср. кв. ошибка: {totalError} {Environment.NewLine}";
+            Messages += $"Целевая ошибка: {initialParams.TargetError} {Environment.NewLine}";
+            Messages += $"Точность: {Math.Abs(totalError - initialParams.TargetError)} {Environment.NewLine}";
+
+            OnPropertyChanged(nameof(Messages));
 
             IsLearning = false;
             OnPropertyChanged(nameof(IsLearning));
@@ -126,8 +138,15 @@ namespace LinearNetwork
             set { _maxIterations = value; OnPropertyChanged(); }
         }
 
+        public double TargetError
+        {
+            get => _targetError;
+            set { _targetError = value; OnPropertyChanged(); }
+        }
+
         private double _learningRate = 0.01;
         private int _maxIterations = 50;
+        private double _targetError = 0.001;
 
         public InitialParams Clone()
         {
@@ -138,6 +157,7 @@ namespace LinearNetwork
                 Bias = Bias,
                 LearningRate = LearningRate,
                 MaxIterations = MaxIterations,
+                TargetError = TargetError,
             };
         }
     }
