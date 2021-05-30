@@ -90,7 +90,6 @@ namespace LinearNetwork.Graph
 
         private readonly Pen _graphPen = new Pen(new SolidColorBrush(Colors.DeepSkyBlue).ToFrozen(), 1).ToFrozen();
         private readonly Pen _axisPen = new Pen(new SolidColorBrush(Color.FromRgb(123, 123, 123)).ToFrozen(), 2).ToFrozen();
-        private readonly Pen _coordPen = new Pen(new SolidColorBrush(Color.FromRgb(234, 234, 234)).ToFrozen(), 1).ToFrozen();
     }
 
     class RatioGraphModel
